@@ -1,0 +1,83 @@
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+void copy_Re(int* newarray, int* oldarray, int s);
+int* regrow(int* oldarray, int& s, int v);
+void copy_Sh(int* newarray, int* oldarray, int s);
+int* shrnik(int* oldarray, int& s);
+void display(int* p, int s);
+
+int main()
+{
+	ifstream read;
+	read.open("input.txt");
+	if (!read)
+	{
+		cout << "File not found";
+	}
+	else
+	{
+		int s = 0, n;
+		int* data = new int[s + 1];
+		read >> n;
+		if (n % 2 == 0)
+		{
+			data[s] = n;
+			s++;
+		}
+		while (read >> n)
+		{
+			if (n % 2 == 0)
+			{
+				data = regrow(data, s, n);
+			}
+		}
+		shrnik(data,s);
+		display(data, s);
+	}
+	system("pause");
+	return 0;
+}
+void copy_Re(int* newarray, int* oldarray, int s)
+{
+	for (int i = 0; i < s; i++)
+	{
+		newarray[i] = oldarray[i];
+	}
+}
+int* regrow(int* oldarray, int& s, int v)
+{
+	int* newarray = new int[s + 1];
+	copy_Re(newarray, oldarray, s);
+	newarray[s] = v;
+	s++;
+	delete[]oldarray;
+	return newarray;
+}
+void copy_Sh(int* newarray, int* oldarray, int s)
+{
+	int j = 0;
+	for (int i = 0; i < s - 1; i++)
+	{
+		if (oldarray[i]!=3)
+		{
+			newarray[i] = oldarray[i];
+		}
+	}
+}
+int* shrnik(int* oldarray, int& s)
+{
+	int* newarray = new int[s - 1];
+	copy(newarray, oldarray, s);
+	s--;
+	delete[]oldarray;
+	return newarray;
+}
+void display(int* p, int s)
+{
+	for (int i = 0; i < s; i++)
+	{
+		cout << p[i] << " ";
+	}
+}

@@ -1,0 +1,287 @@
+#include<iostream>
+#include <windows.h> // for sleep() and giving color
+using namespace std;
+
+void startup();
+void pause(int time);
+void player_Name(char* p1, char* p2);
+void Choose(char& X, char& O);
+void Creat_matrix(char** matrix, int row, int col);
+void player_turn(char** matrix, int row, int col, char X, char* p, int& aa);
+void play_game();
+void delete_matrix(char** matrix, int row, int col);
+void end();
+
+int main()
+{
+	char playAgain;
+	do
+	{
+		startup();
+		play_game();
+		cout << "\nDo you want to play again? (Y/N): ";
+		cin >> playAgain;
+		cin.ignore();
+		system("cls");
+	} while (playAgain == 'Y' || playAgain == 'y');
+	end();
+	pause(2);
+
+	return 0;
+}
+void pause(int time)
+{
+	Sleep(time * 500);
+}
+void startup()
+{
+	int t = 1;
+	system("Color 0A");
+	cout << "\t\t\t\tWelcome to Game!...\n";
+	pause(t + t);
+	system("cls");
+	pause(t);
+	cout << "\t\t\t\tGame" << flush;
+	pause(t);
+	cout << " Start" << flush;
+	pause(t);
+	cout << " Now!" << flush;
+	pause(t + t);
+	system("cls");
+	system("Color 07");
+}
+void player_Name(char* p1, char* p2)
+{
+	cout << "Enter 1 player name: ";
+	cin.getline(p1, 20);
+	cout << "Enter 2 player name: ";
+	cin.getline(p2, 20);
+	system("cls");
+}
+void Choose(char& X, char& O)
+{
+	cin >> X;
+	cin.ignore();
+	if (X == 'X')
+	{
+		O = 'O';
+		cout << "First Player is choosen " << X << endl;
+		cout << "Second Player is choosen " << O << endl;
+	}
+	else if (X == 'O')
+	{
+		O = 'X';
+		cout << "First Player is choosen " << X << endl;
+		cout << "Second Player is choosen " << O << endl;
+	}
+	else
+	{
+		cout << "Error!...\nYou enter a wrong Chracter!...\n";
+	}
+	pause(1.5);
+	system("cls");
+}
+void Creat_matrix(char** matrix, int row, int col)
+{
+	for (int i = 0; i < row; i++) {
+
+		// Declare a memory block of size n
+		matrix[i] = new char[col];
+	}
+	char c = '1';
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			matrix[i][j] = c++;
+		}
+	}
+	cout << endl << "\t\t\t\t\t------------" << endl;
+	for (int i = 0; i < row; i++)
+	{
+		cout << "\t\t\t\t\t|";
+		for (int j = 0; j < col; j++)
+		{
+			cout << matrix[i][j] << " | ";
+		}
+		cout << endl << "\t\t\t\t\t------------" << endl;
+	}
+}
+void player_turn(char** matrix, int row, int col, char X, char* p, int& aa)
+{
+	const int s = 3;
+	char p1;
+	bool validMove = false;
+
+	do
+	{
+		cout << p << " turn (" << X << "): ";
+		cin >> p1;
+		cin.ignore();
+
+		// Check if the entered move is valid
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				if (matrix[i][j] == p1)
+				{
+					validMove = true;
+					break;
+				}
+			}
+			if (validMove)
+				break;
+		}
+
+		if (!validMove)
+		{
+			cout << "Invalid move! Please choose a valid position.\n";
+		}
+
+	} while (!validMove);
+
+	aa = 0;
+	int count = 0;
+	system("cls");
+	// Entry for first player
+	cout << endl << "\t\t\t\t\t------------" << endl;
+	for (int i = 0; i < row; i++)
+	{
+		cout << "\t\t\t\t\t|";
+		for (int j = 0; j < col; j++)
+		{
+			if (matrix[i][j] == p1)
+			{
+				matrix[i][j] = X;
+				cout << matrix[i][j] << " | ";
+			}
+			else
+			{
+				cout << matrix[i][j] << " | ";
+			}
+		}
+		cout << endl << "\t\t\t\t\t------------" << endl;
+	}
+	count = 0;
+	int count1 = 0, count2 = 0, count3 = 0, count4 = 0;
+	for (int i = 0; i < row; i++)//Row and col Wise check
+	{
+		count1 = 0; count2 = 0;
+		for (int j = 0; j < col; j++)
+		{
+			if (matrix[i][j] == X)
+			{
+				count1++;
+				count++;
+			}
+			if (matrix[j][i] == X)
+			{
+				count2++;
+			}
+			if (i == j)
+			{
+				if (matrix[i][i] == X)
+				{
+					count3++;
+				}
+			}
+			if (i + j == row - 1)
+			{
+				if (matrix[i][j] == X)
+				{
+					count4++;
+				}
+			}
+		}
+		if (count1 == s || count2 == s || count3 == s || count4 == s)
+		{
+			aa++;
+		}
+	}
+	if (count >= 5)
+	{
+		aa++;
+		aa++;
+	}
+}
+void play_game()
+{
+	char player1[20], player2[20];//arrays for player name
+	player_Name(player1, player2);//player name
+	char X, O;//variables for choice for user
+	cout << "Choose (X,O) for " << player1 << ": ";
+	Choose(X, O);//taking choice from user to choose variable for first player
+	int row = 3, col = 3;
+	char** matrix = new char*[row];//2D Dynamic Array
+	Creat_matrix(matrix, row, col);//Create Board for Game
+	int aa = 0;
+	while (1)
+	{
+		if (aa == 0)
+		{
+			//First player Turn
+			player_turn(matrix, row, col, X, player1, aa);
+			if (aa == 1)
+			{
+				cout << "Congratulation! " << player1 << " is the winner!...";
+				break;
+			}
+		}
+		if (aa == 0)
+		{
+			//Second player Turn
+			player_turn(matrix, row, col, O, player2, aa);
+			if (aa == 1)
+			{
+				cout << "Congratulation! " << player2 << " is the winner!...";
+				break;
+			}
+		}
+		if (aa >= 2)
+		{
+			cout << "It's a draw! No winner in this game.\nPlay Again!...";
+			break;
+		}
+	}
+	delete_matrix(matrix, row, col);
+}
+void delete_matrix(char** matrix, int row, int col)
+{
+	//Delete the array created
+	for (int i = 0; i < row; i++)
+	{
+		delete[] matrix[i];
+		matrix[i] = nullptr;
+	}
+	delete[] matrix;
+	matrix = nullptr;
+}
+void end()
+{
+	int t = 1;
+	system("cls");
+	system("Color 0A");
+	cout << "\n\n\n";
+	pause(t);
+	cout << "\t\t\t\t\tThank" << flush;
+	pause(t);
+	cout << " you" << flush;
+	pause(t);
+	cout << " for" << flush;
+	pause(t);
+	cout << " playing" << flush;
+	pause(t);
+	cout << " Tic" << flush;
+	pause(t);
+	cout << "-" << flush;
+	pause(t);
+	cout << "Tac" << flush;
+	pause(t);
+	cout << "-" << flush;
+	pause(t);
+	cout << "Toe!" << flush;
+	pause(t);
+	system("cls");
+	system("Color 07");
+}

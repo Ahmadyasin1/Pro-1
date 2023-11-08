@@ -1,0 +1,27 @@
+Gr1={
+    0:[1,2],
+    1:[0,5,6],
+    2:[],
+    3:[5],
+    4:[6],
+    5:[1,3,6,7],
+    6:[4,],
+    7:[6],
+    }
+
+
+def bfs(graph, node): #function for BFS
+    visited = [] # List for visited nodes.
+    queue = []     #Initialize a queue
+    visited.append(node)
+    queue.append(node)
+    while queue:          # Creating loop to visit each node
+        m = queue.pop(0)
+        print (m, end = ", ")
+        for i in graph[m]:
+            if i not in visited:
+                visited.append(i)
+                queue.append(i)
+
+
+bfs(Gr1,0)

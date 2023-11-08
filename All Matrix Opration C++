@@ -1,0 +1,368 @@
+#include<iostream>
+using namespace std;
+
+const int row = 2;
+const int col = 2;
+
+void menu();
+void Call_func(int a);
+void input(int arr[row][col], int row, int col);
+void Row_Sum(int arr[row][col], int row, int col);
+void Col_Sum(int arr[row][col], int row, int col);
+void diagnol(int arr[row][col], int row, int col);
+void Anti_Diagnol(int arr[row][col], int row, int col);
+void Upp_Tri(int arr[row][col], int row, int col);
+void Low_Tri(int arr[row][col], int row, int col);
+void Determi(int arr[row][col], int row, int col);
+void Transpose(int arr[row][col], int row, int col);
+void mul_matric(int A[row][col], int row_1, int col_1, int B[row][col], int row_2, int col_2);
+void Add_matric(int A[row][col], int row_1, int col_1, int B[row][col], int row_2, int col_2);
+void Sub_matric(int A[row][col], int row_1, int col_1, int B[row][col], int row_2, int col_2);
+void display(int arr[row][col], int row, int col);
+
+int main()
+{
+	
+	int a = 0, num = 0;
+	do
+	{
+		system("cls");
+		menu();
+		Call_func(num);
+		cout << "\nPress 1: To perform another action\nPress 0: to exit the function\nInput << ";
+		cin >> a;
+	} while (a == 1);
+	{system("cls");
+	cout << "\t\t\t\t\t\x1b[5;1;31mAttension!...\x1b[0m";
+	cout << "\n\t\t\t\x1b[5mThanks for using our Matrixes Caluclations!...\x1b[0m\n"; }
+	return 0;
+}
+void menu()
+{
+	cout << "Press 1: To find Transpose of Matrix" << endl;
+	cout << "Press 2: To find Diagnol of Matrix" << endl;
+	cout << "Press 3: To find Anti_Diagnol of Matrix" << endl;
+	cout << "Press 4: To find Upper Trinagle of Matrix" << endl;
+	cout << "Press 5: To find Lower Trinagle of Matrix" << endl;
+	cout << "Press 6: To find Determinent of Matrix" << endl;
+	cout << "Press 7: To find Row wise sum of Matrix" << endl;
+	cout << "Press 8: To find Colom wise sum of Matrix" << endl;
+	cout << "Press 9: To find Multiplication of two Matrixes" << endl;
+	cout << "Press 10: To find Adition of two Matrixes" << endl;
+	cout << "Press 11: To find Subtraction of two Matrixes" << endl;
+	cout << "Input >> ";
+}
+void Call_func(int a)
+{
+	const int row_1 = 2;
+	const int col_1 = 2;
+	const int row_2 = 2;
+	const int col_2 = 2;
+	int A[row_1][col_2];
+	int B[row_2][col_2];
+	cin >> a;
+	if ((a>=1&&a<=8))
+	{
+		cout << "Enter the Vlaues of " << row << " by " << col << " Matrix" << ":\n";
+		input(A, row, col);
+		system("cls");
+		cout << "Matrix is:\n";
+		display(A, row, col);
+		cout << endl;
+	}
+	else if (a==9||a==10||a==11)
+	{
+		cout << "Enter the values of Matrix 'A' (" << row << " by " << col << "):\n";
+		input(A, row, col);
+		cout << "Enter the values of Matrix 'B' (" << row << " by " << col << "):\n";
+		input(B, row_2, col_2);
+		system("cls");
+		cout << "A Matrix is : \n";
+		display(A, row_1, col_1);
+		cout << "\nB Matrix is : \n";
+		display(B, row_1, col_1);
+	}
+	switch (a)
+	{
+	case 1:
+		cout << "\nTranspose of this Martrix is:\n";
+		Transpose(A, row, col);
+		break;
+	case 2:
+		cout << "\nDiagnol of this Martrix is:\n";
+		if (row == col)
+		{
+			diagnol(A, row, col);
+		}
+		else
+		{
+			cout << "Your given matrices is not Square!...";
+		}
+		break;
+	case 3:
+		cout << "\nAnti Diagnol of this Martrix is:\n";
+		if (row == col)
+		{
+			Anti_Diagnol(A, row, col);
+		}
+		else
+		{
+			cout << "Your given matrices is not Square!...";
+		}
+		break;
+	case 4:
+		cout << "\nUpper Trinagle of this Martrix is:\n";
+		if (row == col)
+		{
+			Upp_Tri(A, row, col);
+		}
+		else
+		{
+			cout << "Your given matrices is not Square!...";
+		}
+		break;
+	case 5:
+		cout << "\nLower Trinagle of this Martrix is:\n";
+		if (row == col)
+		{
+			Low_Tri(A, row, col);
+		}
+		else
+		{
+			cout << "Your given matrices is not Square!...";
+		}
+		break;
+	case 6:
+		Determi(A, row, col);
+		break;
+	case 7:
+		Row_Sum(A, row, col);
+		break;
+	case 8:
+		Col_Sum(A, row, col);
+		break;
+	case 9:
+		mul_matric(A, row_1, col_1, B, row_2, col_2);
+		break;
+	case 10:
+		Add_matric(A, row_1, col_1, B, row_2, col_2);
+		break;
+	case 11:
+		Sub_matric(A, row_1, col_1, B, row_2, col_2);
+		break;
+	default:
+		break;
+	}
+}
+void input(int arr[row][col], int row, int col)
+{
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			cout << "Enter a value for Location (" << i << "," << j << "):";
+			cin >> arr[i][j];
+		}
+	}
+}
+void Row_Sum(int arr[row][col], int row, int col)
+{
+	cout << "Row wise sum of this array is:\n";
+	for (int i = 0; i < row; i++)
+	{
+		int sum = 0;
+		for (int j = 0; j < col; j++)
+		{
+			sum += arr[i][j];
+		}
+		cout << sum << endl;
+	}
+}
+void Col_Sum(int arr[row][col], int row, int col)
+{
+	cout << "col wise sum of this array is:\n";
+	for (int i = 0; i < row; i++)
+	{
+		int sum = 0;
+		for (int j = 0; j < col; j++)
+		{
+			sum += arr[j][i];
+		}
+		cout << sum << " ";
+	}
+}
+void diagnol(int arr[row][col], int row, int col)
+{
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			if (i == j)
+			{
+				cout << arr[i][j] << "\t";
+			}
+			else
+			{
+				cout << "  ";
+			}
+		}
+		cout << endl;
+	}
+}
+void Anti_Diagnol(int arr[row][col], int row, int col)
+{
+	int j = col - 1;
+	for (int i = 0; i < row; i++)
+	{
+		for (int k = i + 1; k < col; k++)
+		{
+			cout << "  ";
+		}
+		cout << arr[i][j] << endl;
+		j--;
+	}
+	cout << endl;
+}
+void Upp_Tri(int arr[row][col], int row, int col)
+{
+	for (int i = 0; i < row; i++)
+	{
+		for (int k = 0; k < i; k++)
+		{
+			cout << "  ";
+		}
+		for (int j = i; j < col; j++)
+		{
+			cout << arr[i][j] << " ";
+		}
+		cout << endl;
+	}
+}
+void Low_Tri(int arr[row][col], int row, int col)
+{
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j <= i; j++)
+		{
+			cout << arr[i][j] << " ";
+		}
+		cout << endl;
+	}
+}
+void Determi(int arr[row][col], int row, int col)
+{
+	if (row==2&&col==2)
+	{
+		int diagnol = 1, anti_diagnol = 1, Deter = 0;
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				if (i == j)
+				{
+					diagnol *= arr[i][j];
+				}
+			}
+		}
+		int j = col - 1;
+		for (int i = 0; i < row; i++)
+		{
+			anti_diagnol *= arr[i][j];
+			j--;
+		}
+		Deter =anti_diagnol-diagnol;
+		cout << "Determinent of Matrix is: " << Deter << endl;
+	}
+	else
+	{
+		cout << "Plaese give only 2 by 2 matrix!..." << endl;
+	}
+}
+void Transpose(int arr[row][col], int row, int col)
+{
+	for (int j = 0; j < col; j++)
+	{
+		for (int i = 0; i < row; i++)
+		{
+			if (cout << arr[i][j])
+			{
+				cout << " ";
+			}
+			else
+			{
+				cout << "  ";
+			}
+		}
+		cout << endl;
+	}
+}
+void mul_matric(int A[row][col], int row_1, int col_1, int B[row][col], int row_2, int col_2)
+{
+	if (row_1 == col_2)
+	{
+		int temp[row][col];
+		for (int i = 0; i < row_1; i++)
+		{
+			for (int j = 0; j < col_2; j++)
+			{
+				temp[i][j] = 0;
+				for (int k = 0; k < col_1; k++)
+				{
+					temp[i][j] += A[i][k] * B[k][j];
+				}
+			}
+		}
+		cout << "Multiplication of Matrix is:\n";
+		display(temp, row, col);
+	}
+}
+void Add_matric(int A[row][col], int row_1, int col_1, int B[row][col], int row_2, int col_2)
+{
+	int C[row][col];
+	if (row_1 == row_2 && col_1 == col_2)
+	{
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				C[i][j] = A[i][j] + B[i][j];
+			}
+		}
+		cout << "\nSum of Matrix is : \n";
+		display(C, row, col);
+	}
+}
+void Sub_matric(int A[row][col], int row_1, int col_1, int B[row][col], int row_2, int col_2)
+{
+	int C[row][col];
+	if (row_1 == row_2 && col_1 == col_2)
+	{
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				C[i][j] = A[i][j] - B[i][j];
+			}
+		}
+		cout << "\nSubtraction of Matrix is : \n";
+		display(C, row, col);
+	}
+}
+void display(int arr[row][col], int row, int col)
+{
+	for (int i = 0; i < row; i++)
+	{
+		for (int j = 0; j < col; j++)
+		{
+			if (cout << arr[i][j])
+			{
+				cout << " ";
+			}
+			else
+			{
+				cout << "  ";
+			}
+		}
+		cout << endl;
+	}
+}
