@@ -1,0 +1,39 @@
+import queue as Q
+
+G1 = {
+    'S':{'A':6, 'B':5, 'C':10},
+    'A':{'E':6},
+    'B':{'E':6,'D':7},
+    'C':{'D':6},
+    'D':{'F':6},
+    'E':{'F':4},
+    'F':{'G':3},
+    'G':{}
+    }
+
+def UCS(g, s, goal):
+    if s not in g:
+        raise TypeError(str(s)+ ' not found in Graph!!!')
+        return
+    if goal not in g:
+        raise TypeError(str(s)+ ' not found in Graph!!!')
+        return
+    
+    queue = Q.PriorityQueue()
+    queue.put((0,[s]))
+    
+    while not queue.empty():
+        node = queue.get()
+        current = node[1][len(node[1])-1]
+        cost = node[0]
+        if goal in node[1]:
+            print("path found:"+ str(node[1]) +", Cost = "+ str(cost))
+            break
+        for neighbour in g[current]:
+            temp = node[1][:]
+            temp.append(neighbour)
+            queue.put((cost+g[current][neighbour], temp))
+            
+            
+            
+UCS(G1, 'S', 'G')
