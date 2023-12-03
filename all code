@@ -1,0 +1,155 @@
+import queue as Q
+# Graph for BFS/DFS
+Gr1={
+    0:[1,2],
+    1:[0,5,6],
+    2:[],
+    3:[5],
+    4:[6],
+    5:[1,3,6,7],
+    6:[4,],
+    7:[6],
+    }
+# Graph for UCS/GS/A*S/IDA*S
+G = {
+    'A': {'B': 11, 'C': 14, 'D': 7},
+    'B': {'E': 15},
+    'C': {'E': 8, 'F': 10},
+    'D': {'F': 25},
+    'E': {'C': 8, 'H': 9},
+    'F': {'C': 10, 'G': 20},
+    'H': {'G': 10},
+    'G': {},
+}
+#huristic vlaues
+h = {'A': 40, 'B': 32, 'C': 25, 'D': 35, 'E': 19, 'F': 17, 'G': 0, 'H': 10}
+
+# Bredth first Search
+def BFS(graph,node):
+    visited=[]
+    queue=[]
+    visited.append(node)
+    queue.append(node)
+    while queue:
+        n=queue.pop(0)
+        print(n,end='')
+        for neighbor in graph[n]:
+            if neighbor not in visited:
+                visited.append(neighbor)
+                queue.append(neighbor)
+
+# Depth first Search
+visited =set()                
+def DFS(visited,graph,node):
+    if node not in visited:
+        print(node,end="")
+        visited.add(node)
+        for neighbor in graph[node]:
+            DFS(visited,graph,neighbor)
+
+# Unoform cost Search            
+def UCS(graph,start,goal):
+    
+    if start not in graph or goal not in graph:
+        print("start or goal not in graph!....")
+        return
+    
+    queue=Q.PriorityQueue()
+    queue.put((0,[start]))
+    
+    while not queue.empty():
+        cost,path=queue.get()
+        current=path[-1]
+        
+        if goal in path:
+            print("Path is:",path,", Cost is:",cost)
+            return
+        for neighbor in graph[current]:
+            g_n=cost+graph[current][neighbor]
+            queue.put((g_n,path+[neighbor]))
+# Greedy Search    
+def Greedy(graph,start,goal,huristic):
+    if start not in graph or goal not in graph:
+        print("start or goal not in graph!....")
+        return
+    
+    queue=Q.PriorityQueue()
+    queue.put((0,[start],0))
+    
+    while not queue.empty():
+        huristi,path,cost=queue.get()
+        current=path[-1]
+        
+        if goal in path:
+            print("Path is:",path,", Cost is:",cost)
+            return
+        for neighbor in graph[current]:
+            g_n=cost+graph[current][neighbor]
+            h_n=huristic[neighbor]
+            queue.put((h_n,path+[neighbor],g_n))    
+
+# A* Search
+def A_star(graph,start,goal,huristic):
+    if start not in graph or goal not in graph:
+        print("start or goal not in graph!....")
+        return
+    
+    queue=Q.PriorityQueue()
+    queue.put((0,[start],0))
+    
+    while not queue.empty():
+        huristi,path,cost=queue.get()
+        current=path[-1]
+        
+        if goal in path:
+            print("Path is:",path,", Cost is:",cost)
+            return
+        for neighbor in graph[current]:
+            g_n=cost+graph[current][neighbor]
+            h_n=huristic[neighbor]
+            f_n=g_n+h_n
+            queue.put((f_n,path+[neighbor],g_n)) 
+            
+# IDA* Search
+def IDA_star(graph, start, goal,huristic):
+    def search(path, cost, bound):
+        current = path[-1]
+        f_n = cost + huristic[current]
+        if f_n > bound:
+            return f_n
+        if current == goal:
+            print("Path is:", path, "Cost is:", cost)
+            return -1  # Indicates goal found
+        min_bound = float('inf')
+        for neighbor in graph[current]:
+            result = search(path+[neighbor],cost+graph[current][neighbor], bound)
+            if result == -1:
+                return -1  # Goal found in deeper level
+            if result < min_bound:
+                min_bound = result
+        return min_bound
+
+    bound = huristic[start]
+    while True:
+        result = search([start], 0, bound)
+        if result == -1:
+            return
+        if result == float('inf'):
+            print("Goal not reachable.")
+            return
+        bound = result
+
+
+
+print("BFS:")
+BFS(Gr1,0)
+print("\nDFS:")
+DFS(visited,Gr1,0)
+print("\nUCS:")
+UCS(G,'A','G')
+print("Greedy:")
+Greedy(G,'A','G',h)
+print("A star:")
+A_star(G,'A','G',h)
+print("IDA star:")
+IDA_star(G, 'A', 'G',h)
